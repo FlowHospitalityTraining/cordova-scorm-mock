@@ -109,7 +109,7 @@
 	<script>
 		 $(document).on("click", '[data-action="open-scorm-module-a"]', function () {
 			event.preventDefault();
-			var url = "https://www.flowmodulemanager.co.uk/api/v2/mobile/module_redirect/?access_code=TECBQSWBWVGBUYFTQLXF&module_id=22695&cookie_consent=1"
+			var url = "https://mm-upgrade-staging.flowhospitalitytraining.co.uk/api/v2/mobile/module_view/1703510/18431/?cookie_consent=1"
 			window.screen.orientation.unlock();
 			if (device.platform == "Android") {
 				var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=no,toolbar=no');
