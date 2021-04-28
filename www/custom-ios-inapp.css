@@ -1,0 +1,12 @@
+html {
+  overflow: hidden;
+  position: relative;
+  background-color: red !important;
+}
+
+body {
+  overflow: auto;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  background-color: red !important;
+}

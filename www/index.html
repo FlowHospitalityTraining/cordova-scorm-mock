@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="msapplication-tap-highlight" content="no" />
+	<meta name="viewport" content="initial-scale=1, width=device-width, height=device-height, viewport-fit=cover">
+	<!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+	<meta name="Content-Security-Policy" http-equiv="Content-Security-Policy" content="
+		default-src * gap://ready file: data: 'unsafe-inline' 'unsafe-eval' *.google.co.uk *.googleapis.co.uk *.gstatic.co.uk *.google.com; 
+		style-src 'self' data: 'unsafe-inline' https://fonts.googleapis.com; 
+		font-src 'self' data: https://fonts.gstatic.com;
+		media-src *; 
+		img-src * data: ;
+	" />
+	<!-- Good default declaration:
+	* gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+	* https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+	* Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+		* Enable inline JS: add 'unsafe-inline' to default-src
+		* Enable eval(): add 'unsafe-eval' to default-src
+	* Create your own at http://cspisawesome.com
+	-->
+
+	<!-- Include jQuery Mobile stylesheets -->
+	<link rel="stylesheet" type="text/css" href="jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+
+	<!-- Include the jQuery library -->
+	<script src="js/jquery-1.11.3.min.js"></script>
+
+	<!-- Include the jQuery Mobile library -->
+	<script src="jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+	<!-- Include the Semantic UI library -->
+	<script src="semantic/semantic.js"></script>
+	<script src="semantic/components/fomantic_modal.js"></script>
+	<!-- Include Moment.js library -->
+	<script src="js/moment.min.js"></script>
+
+	<script src="js/chart.min.js"></script>
+
+	<!-- Training Calendar -->
+	
+	<script src="js/fullcalendar-3.9.0/lib/moment.min.js"></script>
+    <script src="js/fullcalendar-3.9.0/fullcalendar.js"></script>
+	<script src="js/fullcalendar-3.9.0/locale-all.js"></script>
+	
+    <link rel="stylesheet" type="text/css" href="js/fullcalendar-3.9.0/fullcalendar.css">
+
+	<title>MOCK</title>
+
+	<!-- SemanticUI stylesheet -->
+	<link rel="stylesheet" type="text/css" href="semantic/semantic.css" />
+
+	<!-- Application stylesheet -->
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+
+	<!-- Training Path stylesheet -->
+	<link rel="stylesheet" type="text/css" href="css/my-training.css" />
+
+	<!-- PAGES -->
+	<link rel="stylesheet" type="text/css" href="css/login-page.css" />
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css" />
+	<link rel="stylesheet" type="text/css" href="css/library-page.css" />
+	<link rel="stylesheet" type="text/css" href="css/account-details.css" />
+	<link rel="stylesheet" type="text/css" href="css/about-page.css" />
+	<link rel="stylesheet" type="text/css" href="css/help-support-page.css" />
+	<link rel="stylesheet" type="text/css" href="css/news-noticeboard.css" />
+
+	<link rel="stylesheet" type="text/css" href="css/workbooks.css" />
+	<link rel="stylesheet" type="text/css" href="css/appraisals.css" />
+	<link rel="stylesheet" type="text/css" href="css/training-calendar-page.css" />
+	<!-- todo: -->
+	<!-- <link rel="stylesheet" type="text/css" href="css/training-calendar.css" />
+	<link rel="stylesheet" type="text/css" href="css/workbooks.css" />
+	<link rel="stylesheet" type="text/css" href="css/careers.css" /> -->
+	<link rel="stylesheet" type="text/css" href="css/social-forums.css" />
+	<link rel="stylesheet" type="text/css" href="css/item-page-v2.css" />
+
+
+	<!-- COMPONENTS -->
+	<link rel="stylesheet" type="text/css" href="css/panel-menu.css" />
+	<link rel="stylesheet" type="text/css" href="css/flow-tabs.css" />
+	<link rel="stylesheet" type="text/css" href="css/flow-card.css" />
+	<link rel="stylesheet" type="text/css" href="css/shared-styles.css" />
+	<link rel="stylesheet" type="text/css" href="css/workbooks-slides.css" />
+
+	<!-- Placeholder for the branding css -->
+	<style id="brandingCSS"></style>
+
+	<!-- FONTS -->
+	<link rel="stylesheet" type="text/css" href="css/font-face.css" />
+
+	<!-- Debugging Library: https://www.npmjs.com/package/weinre
+	* A limited implementation of a Remote Web Inspector
+	* for remotely debugging apps running on a device.
+	* Set up on your local machine using the following link
+		* using http://docs.phonegap.com/references/developer-app/debugging -->
+	<!-- <script src="http://192.168.0.4:8080/target/target-script-min.js#anonymous"></script>  -->
+
+	<!-- include summernote css/js -->
+	<link rel="stylesheet" type="text/css" href="css/summernote-lite.css" />
+	<script src="js/summernote-lite.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/giphy.css" />
+	<script src="js/giphy.js"></script>
+	
+	<script>
+		 $(document).on("click", '[data-action="open-scorm-module-a"]', function () {
+			event.preventDefault();
+			var url = "https://www.flowmodulemanager.co.uk/api/v2/mobile/module_redirect/?access_code=TECBQSWBWVGBUYFTQLXF&module_id=22695&cookie_consent=1"
+			window.screen.orientation.unlock();
+			if (device.platform == "Android") {
+				var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=no,toolbar=no');
+				browser.addEventListener('loadstop', AddCssInApp);
+				browser.addEventListener('loadstop', AddJsInApp);
+			}
+			if (device.platform == "iOS") {
+				var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=yes,toolbar=yes');
+				browser.addEventListener('loadstop', AddCssInApp);
+				browser.addEventListener('loadstop', AddJsInApp);
+			}
+			browser.addEventListener('exit', function() {
+				window.screen.orientation.lock('portrait');
+			});
+			function AddJsInApp() {
+				console.log("InAppBrowser Window loaded");
+				$.ajax({
+					type: "GET",
+					url: "./custom-ios-inapp.js",
+					dataType: "text",
+					success: function (JScode) {
+						browser.executeScript(
+							{ code:  JScode},
+							function(){
+								console.log("JS code Inserted Succesfully into inApp Browser Window");
+							}
+						);
+					},
+					error: function () {
+					console.error("Ajax Error");
+				}
+				});
+			}
+			function AddCssInApp() {
+				console.log("InAppBrowser Window loaded");
+				$.ajax({
+					type: "GET",
+					url: "./custom-ios-inapp.css",
+					dataType: "text",
+					success: function (CSScode) {
+						browser.insertCSS(
+							{ code:  CSScode},
+							function(){
+								console.log("CSS code Inserted Succesfully into inApp Browser Window");
+							}
+						);
+					},
+					error: function () {
+					console.error("Ajax Error");
+				}
+				});
+			}
+		 });
+	</script>
+
+</head>
+
+<body style="background-color: #000000;">
+
+	<div data-role="page" id="login">
+		<div class='login-background'>
+			<div role="main" class="ui-content">
+				<div class="login-logo-container">
+					<img src="./img/FlowApp_Login_Logo.svg" class="login-logo" />
+				</div>
+				<button data-action="open-scorm-module-a" class="ui-btn ui-btn-inline ui-corner-all ui-mini login-btn">
+					SCORM
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/imgcache.js"></script>
+	<script type="text/javascript" src="js/push.js"></script>
+	<script type="text/javascript" src="js/i18next.min.js"></script>
+	<script type="text/javascript" src='js/jquery-i18next.min.js'></script>
+	<script type="text/javascript" src="js/i18nextXHRBackend.min.js"></script>
+	<script type="text/javascript" src="js/mobileapp.js"></script>
+	<script type="text/javascript" src='js/init-i18next.js'></script>
+	<script type="text/javascript" src="js/training_path.js"></script>
+	<script type="text/javascript" src="js/rounded-list.js"></script>
+
+	<!-- components js -->
+	<!-- <script type="text/javascript" src="js/flow-modal.js"></script>
+	<script type="text/javascript" src="js/flow-tabs.js"></script>
+	<script type="text/javascript" src="js/flow-tabs-help-support.js"></script>
+	<script type="text/javascript" src="js/workbooks-slides.js"></script>
+	<script type="text/javascript" src="js/flow-collums-size.js"></script> -->
+	<script type="text/javascript">
+		$(document).bind("mobileinit", function () {
+			$.mobile.pushStateEnabled = false;
+		});
+	</script>
+	<script type="text/javascript">
+		app.initialize();
+
+		var staging = 'https://mm-upgrade-staging.flowhospitalitytraining.co.uk';
+		var live = "https://www.flowmodulemanager.co.uk";
+		var localMD = 'http://192.168.16.81:8002';
+		var localDHS = 'http://192.168.16.118:8000';
+		localStorage.remoteHost = live;
+
+		// localStorage.remoteHost = 'https://www.flowmodulemanager.co.uk';
+		document.addEventListener("deviceready", function () {
+			// start image cache 
+			// ImgCache.options.debug = true;
+			// ImgCache.init();
+			try {
+				var pushNotifications = new PushNotifications();
+				pushNotifications.init();
+			} catch (err) {
+				console.log("Push notifications init failed.");
+				console.log(err);
+			}
+			var mobileApp = new MobileApp();
+			if (window.Intl && typeof window.Intl === 'object') {
+				var start_navigator_language = navigator.language;
+				localStorage.locale = start_navigator_language;
+			}
+			mobileApp.init();
+		});
+	</script>
+</body>
+
+</html>
