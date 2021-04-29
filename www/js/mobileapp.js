@@ -899,6 +899,84 @@ MobileApp.prototype.setupEvents = function () {
         $.mobile.changePage("#module-launch-V2");
     });
 
+    $(document).on("click", '[data-action="open-scorm-module-a"]', function (event) {
+      event.preventDefault();
+      var url = "https://mm-upgrade-staging.flowhospitalitytraining.co.uk/api/v2/mobile/module_redirect/?access_code=TBGFZSBKPLWCRQJPNKVL&module_id=18431&cookie_consent=1"
+      const options = {
+          method: 'get',
+          // data: { id: 12, message: 'test' },
+          // headers: { Authorization: 'OAuth2: token' }
+      };
+      // cordova.plugin.http.sendRequest(url, options, function(response) {
+      //     // prints 200
+      //     console.log(response.status);
+      //     openModalIframe(response.data);
+      //     }, 
+      //     function(response) {
+      //     // prints 403
+      //     console.log(response.status);
+      //     //prints Permission denied
+      //     console.log(response.error);
+      // });
+      // if (device.platform == "Android") {
+      // 	var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=no,toolbar=no');
+      // 	// browser.addEventListener('loadstop', AddCssInApp);
+      // 	// browser.addEventListener('loadstop', AddJsInApp);
+      // }
+      // if (device.platform == "iOS") {
+      // 	var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=yes,toolbar=yes');
+      // 	// browser.addEventListener('loadstop', AddCssInApp);
+      // 	// browser.addEventListener('loadstop', AddJsInApp);
+      // }
+      openModalIframe(url);
+      function openModalIframe(scorm_url){
+          var scormUrl = scorm_url;
+          $("#modal-scorm").modal('show').modal({
+              closable: true
+          });
+          var iframe = $('#mainFrame');
+          iframe.attr( "data", scormUrl );
+      }
+      function AddJsInApp() {
+          console.log("InAppBrowser Window loaded");
+          $.ajax({
+              type: "GET",
+              url: "./custom-ios-inapp.js",
+              dataType: "text",
+              success: function (JScode) {
+                  browser.executeScript(
+                      { code:  JScode},
+                      function(){
+                          console.log("JS code Inserted Succesfully into inApp Browser Window");
+                      }
+                  );
+              },
+              error: function () {
+              console.error("Ajax Error");
+          }
+          });
+      }
+      function AddCssInApp() {
+          console.log("InAppBrowser Window loaded");
+          $.ajax({
+              type: "GET",
+              url: "./custom-ios-inapp.css",
+              dataType: "text",
+              success: function (CSScode) {
+                  browser.insertCSS(
+                      { code:  CSScode},
+                      function(){
+                          console.log("CSS code Inserted Succesfully into inApp Browser Window");
+                      }
+                  );
+              },
+              error: function () {
+              console.error("Ajax Error");
+          }
+          });
+      }
+    });
+
     $(document).on("click", '[data-action="open-scorm-module"]', function (event) {
         event.preventDefault();
         var url = $(this).data("src");
@@ -2221,58 +2299,58 @@ MobileApp.prototype.setDonutChart = function(overdue, outstanding, complete) {
     var self = this;
     var total = overdue + outstanding + complete
 
-    var ctx = $('#myTrainingChart')[0].getContext('2d');    
-    Chart.pluginService.register({
-        beforeDraw: function(chart) {
-            var width = chart.chart.width
-            var height = chart.chart.height
-            var ctx = chart.chart.ctx
-            ctx.clearRect(0, 0, width, height);
-            ctx.restore();
-            ctx.textBaseline = "middle";
+    // var ctx = $('#myTrainingChart')[0].getContext('2d');    
+    // Chart.pluginService.register({
+    //     beforeDraw: function(chart) {
+    //         var width = chart.chart.width
+    //         var height = chart.chart.height
+    //         var ctx = chart.chart.ctx
+    //         ctx.clearRect(0, 0, width, height);
+    //         ctx.restore();
+    //         ctx.textBaseline = "middle";
 
-            var fontSize = (height / 40).toFixed(2);
-            ctx.font = fontSize + "em Noto Sans ExtraCondensed SemiBold";
-            if (total == 0) {
-                var number = "0%";
-            } else {
-                var number = ((100 * complete) / total).toFixed(0) + "%";
-            }
-            var numberX = Math.round((width - ctx.measureText(number).width) / 2);
-            var numberY = (height / 2) - height/20;
-            ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-            ctx.fillText(number, numberX, numberY);
+    //         var fontSize = (height / 40).toFixed(2);
+    //         ctx.font = fontSize + "em Noto Sans ExtraCondensed SemiBold";
+    //         if (total == 0) {
+    //             var number = "0%";
+    //         } else {
+    //             var number = ((100 * complete) / total).toFixed(0) + "%";
+    //         }
+    //         var numberX = Math.round((width - ctx.measureText(number).width) / 2);
+    //         var numberY = (height / 2) - height/20;
+    //         ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+    //         ctx.fillText(number, numberX, numberY);
 
 
-            var fontSize = (height / 110).toFixed(2);
-            ctx.font = fontSize + "em noto_sans_regular";
-            ctx.textBaseline = "middle";
-            var label = i18next.t("complete");
-            var labelX = Math.round((width - ctx.measureText(label).width) / 2);
-            var labelY = (height / 2) + height/8;
-            ctx.fillText(label, labelX, labelY);
-            ctx.save();
-        }
-    });
-    var myTrainingChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [overdue, outstanding, complete],
-                backgroundColor: [
-                    self.colours.mobile_warning_colour_a1,
-                    self.colours.mobile_alert_colour_b1,
-                    self.colours.mobile_ok_colour_c1,
-                ]
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            cutoutPercentage: 70
-        }
-    });
+    //         var fontSize = (height / 110).toFixed(2);
+    //         ctx.font = fontSize + "em noto_sans_regular";
+    //         ctx.textBaseline = "middle";
+    //         var label = i18next.t("complete");
+    //         var labelX = Math.round((width - ctx.measureText(label).width) / 2);
+    //         var labelY = (height / 2) + height/8;
+    //         ctx.fillText(label, labelX, labelY);
+    //         ctx.save();
+    //     }
+    // });
+    // var myTrainingChart = new Chart(ctx, {
+    //     type: 'doughnut',
+    //     data: {
+    //         datasets: [{
+    //             data: [overdue, outstanding, complete],
+    //             backgroundColor: [
+    //                 self.colours.mobile_warning_colour_a1,
+    //                 self.colours.mobile_alert_colour_b1,
+    //                 self.colours.mobile_ok_colour_c1,
+    //             ]
+    //         }]
+    //     },
+    //     options: {
+    //         legend: {
+    //             display: false
+    //         },
+    //         cutoutPercentage: 70
+    //     }
+    // });
 };
 
 MobileApp.prototype.dashboardV2 = function () {
@@ -2284,159 +2362,159 @@ MobileApp.prototype.dashboardV2 = function () {
     var overdue = dashboardData.chart_data.overdue;
     var outstanding = dashboardData.chart_data.outstanding;
     var complete = dashboardData.chart_data.complete;
-    self.setDonutChart(overdue, outstanding, complete);
+    // self.setDonutChart(overdue, outstanding, complete);
 
-    // Set next module name
-    if (dashboardData.next_module.name != null) {
-        var module_name = dashboardData.next_module.name;
-        $("#new-dashboard .segment.continue .sub.header").text(i18next.t('Continue-$1', { $1: module_name}));
-        $("#new-dashboard .segment.continue").attr("data-id", dashboardData.next_module.id).attr("data-item-type", "module");
-        $("#new-dashboard .segment.continue").addClass("training_path_item");
-    } else {
-        var total_modules = dashboardData.chart_data.complete + dashboardData.chart_data.outstanding + dashboardData.chart_data.overdue
-        $("#new-dashboard .segment.continue").addClass("all-complete");
-        if (dashboardData.chart_data.complete == total_modules && total_modules != 0) {
-            $("#new-dashboard .segment.continue .sub.header").text(i18next.t('You-have-completed-all-modules'));
-        } else {
-            $("#new-dashboard .segment.continue .sub.header").text(i18next.t('You-have-no-modules-assigned-to-you'));
-        }
-    }
-    // Indicationif there is overdue training
-    if (dashboardData.chart_data.overdue > 0) {
-        $("#new-dashboard .segment.overdue .sub.header").text(i18next.t('You-have-Overdue-Modules'));
-    } else {
-        $("#new-dashboard .segment.overdue .sub.header").text(i18next.t('You-have-no-Overdue-Modules'));
-    }
+    // // Set next module name
+    // if (dashboardData.next_module.name != null) {
+    //     var module_name = dashboardData.next_module.name;
+    //     $("#new-dashboard .segment.continue .sub.header").text(i18next.t('Continue-$1', { $1: module_name}));
+    //     $("#new-dashboard .segment.continue").attr("data-id", dashboardData.next_module.id).attr("data-item-type", "module");
+    //     $("#new-dashboard .segment.continue").addClass("training_path_item");
+    // } else {
+    //     var total_modules = dashboardData.chart_data.complete + dashboardData.chart_data.outstanding + dashboardData.chart_data.overdue
+    //     $("#new-dashboard .segment.continue").addClass("all-complete");
+    //     if (dashboardData.chart_data.complete == total_modules && total_modules != 0) {
+    //         $("#new-dashboard .segment.continue .sub.header").text(i18next.t('You-have-completed-all-modules'));
+    //     } else {
+    //         $("#new-dashboard .segment.continue .sub.header").text(i18next.t('You-have-no-modules-assigned-to-you'));
+    //     }
+    // }
+    // // Indicationif there is overdue training
+    // if (dashboardData.chart_data.overdue > 0) {
+    //     $("#new-dashboard .segment.overdue .sub.header").text(i18next.t('You-have-Overdue-Modules'));
+    // } else {
+    //     $("#new-dashboard .segment.overdue .sub.header").text(i18next.t('You-have-no-Overdue-Modules'));
+    // }
 
-    // Build next appraisal info
-    if (companySettings.appraisals_enabled) {
-        if (!dashboardData.next_appraisal.id) {
-            var labels = i18next.t(self.labels.appraisal_label_plural);
-            $("#new-dashboard .next-appraisal h4").text(i18next.t('You-have-no-upcoming-$1', { $1: labels }));
-            $("#new-dashboard .next-appraisal h5").text('');
-            $("#new-dashboard .next-appraisal p").text('');
-        } else {
-            $("#new-dashboard .next-appraisal").attr("data-id", dashboardData.next_appraisal.id).attr("data-item-type", "appraisal").addClass('training_path_item');
-                var message = i18next.t(dashboardData.next_appraisal.name);
-            $("#new-dashboard .next-appraisal h4").text(message); // End of year appraisal
-            if (dashboardData.next_appraisal.appraiser != "") {
-                $("#new-dashboard .next-appraisal h5").text(i18next.t('with-$1', { $1: dashboardData.next_appraisal.appraiser} ));
-            }
-            var myLabel = self.labels.appraisal_label;
-            $("#new-dashboard .next-appraisal p").text(i18next.t('Your-next-$1', { $1:  myLabel }));
-            if (dashboardData.next_appraisal.date) {
-                $("#new-dashboard .next-appraisal p").append(' ' + i18next.t('is-on') + ' ' + moment(dashboardData.next_appraisal.date).format("DD MMM YYYY"));
-            }
-        }
-    }
-    // Build next training session info
-    if (companySettings.training_calendar_enabled) {
-        if (!dashboardData.next_training_session.id) {
-            $("#new-dashboard .next-training-session h4").text(i18next.t("You-have-no-upcoming-training-sessions"));
-            $("#new-dashboard .next-training-session h5").text('');
-            $("#new-dashboard .next-training-session p").text('');
-        } else {
-            $("#new-dashboard .next-training-session").attr("data-id", dashboardData.next_training_session.id).attr("data-item-type", "training session");
-            $("#new-dashboard .next-training-session h4").text(i18next.t(ashboardData.next_training_session.name));
-            $("#new-dashboard .next-training-session h5").text(i18next.t("at-$1", {$1: dashboardData.next_training_session.location}));
-            $("#new-dashboard .next-training-session p").text(i18next.t("Your-next-training-session"));
-            if (dashboardData.next_appraisal.date) {
-                $("#new-dashboard .next-training-session p").append(i18next.t("is-on") + " " + moment(dashboardData.next_training_session.date).format("DD MMM YYYY") + " " + i18next.t("at") + " " + moment(dashboardData.next_training_session.date).format("HH:mm"));
-            }
-        }
-    }
-    // Decide what to show in second row of dashboard
-    if (companySettings.appraisals_enabled && companySettings.training_calendar_enabled) {
-        if (moment(dashboardData.next_training_session.date).isBefore(dashboardData.next_appraisal.date)) {
-            $("#new-dashboard .next-appraisal").hide();
-            $("#new-dashboard .next-training-session").show();
-        } else {
-            $("#new-dashboard .next-appraisal").show();
-            $("#new-dashboard .next-training-session").hide();
-        }
-    } else if (companySettings.appraisals_enabled && !companySettings.training_calendar_enabled) {
-        $("#new-dashboard .next-appraisal").show();
-        $("#new-dashboard .next-training-session").hide();
-    } else if (!companySettings.appraisals_enabled && companySettings.training_calendar_enabled) {
-        $("#new-dashboard .next-appraisal").hide();
-        $("#new-dashboard .next-training-session").show();
-    } else {
-        $("#new-dashboard .next-appraisal").show();
-        $("#new-dashboard .next-training-session").hide();
-        var myLabel = i18next.t(self.labels.appraisal_label_plural);
-        $("#new-dashboard .next-appraisal h4").text(i18next.t("You-have-no-upcoming-$1", {$1:myLabel}));
-    }
+    // // Build next appraisal info
+    // if (companySettings.appraisals_enabled) {
+    //     if (!dashboardData.next_appraisal.id) {
+    //         var labels = i18next.t(self.labels.appraisal_label_plural);
+    //         $("#new-dashboard .next-appraisal h4").text(i18next.t('You-have-no-upcoming-$1', { $1: labels }));
+    //         $("#new-dashboard .next-appraisal h5").text('');
+    //         $("#new-dashboard .next-appraisal p").text('');
+    //     } else {
+    //         $("#new-dashboard .next-appraisal").attr("data-id", dashboardData.next_appraisal.id).attr("data-item-type", "appraisal").addClass('training_path_item');
+    //             var message = i18next.t(dashboardData.next_appraisal.name);
+    //         $("#new-dashboard .next-appraisal h4").text(message); // End of year appraisal
+    //         if (dashboardData.next_appraisal.appraiser != "") {
+    //             $("#new-dashboard .next-appraisal h5").text(i18next.t('with-$1', { $1: dashboardData.next_appraisal.appraiser} ));
+    //         }
+    //         var myLabel = self.labels.appraisal_label;
+    //         $("#new-dashboard .next-appraisal p").text(i18next.t('Your-next-$1', { $1:  myLabel }));
+    //         if (dashboardData.next_appraisal.date) {
+    //             $("#new-dashboard .next-appraisal p").append(' ' + i18next.t('is-on') + ' ' + moment(dashboardData.next_appraisal.date).format("DD MMM YYYY"));
+    //         }
+    //     }
+    // }
+    // // Build next training session info
+    // if (companySettings.training_calendar_enabled) {
+    //     if (!dashboardData.next_training_session.id) {
+    //         $("#new-dashboard .next-training-session h4").text(i18next.t("You-have-no-upcoming-training-sessions"));
+    //         $("#new-dashboard .next-training-session h5").text('');
+    //         $("#new-dashboard .next-training-session p").text('');
+    //     } else {
+    //         $("#new-dashboard .next-training-session").attr("data-id", dashboardData.next_training_session.id).attr("data-item-type", "training session");
+    //         $("#new-dashboard .next-training-session h4").text(i18next.t(ashboardData.next_training_session.name));
+    //         $("#new-dashboard .next-training-session h5").text(i18next.t("at-$1", {$1: dashboardData.next_training_session.location}));
+    //         $("#new-dashboard .next-training-session p").text(i18next.t("Your-next-training-session"));
+    //         if (dashboardData.next_appraisal.date) {
+    //             $("#new-dashboard .next-training-session p").append(i18next.t("is-on") + " " + moment(dashboardData.next_training_session.date).format("DD MMM YYYY") + " " + i18next.t("at") + " " + moment(dashboardData.next_training_session.date).format("HH:mm"));
+    //         }
+    //     }
+    // }
+    // // Decide what to show in second row of dashboard
+    // if (companySettings.appraisals_enabled && companySettings.training_calendar_enabled) {
+    //     if (moment(dashboardData.next_training_session.date).isBefore(dashboardData.next_appraisal.date)) {
+    //         $("#new-dashboard .next-appraisal").hide();
+    //         $("#new-dashboard .next-training-session").show();
+    //     } else {
+    //         $("#new-dashboard .next-appraisal").show();
+    //         $("#new-dashboard .next-training-session").hide();
+    //     }
+    // } else if (companySettings.appraisals_enabled && !companySettings.training_calendar_enabled) {
+    //     $("#new-dashboard .next-appraisal").show();
+    //     $("#new-dashboard .next-training-session").hide();
+    // } else if (!companySettings.appraisals_enabled && companySettings.training_calendar_enabled) {
+    //     $("#new-dashboard .next-appraisal").hide();
+    //     $("#new-dashboard .next-training-session").show();
+    // } else {
+    //     $("#new-dashboard .next-appraisal").show();
+    //     $("#new-dashboard .next-training-session").hide();
+    //     var myLabel = i18next.t(self.labels.appraisal_label_plural);
+    //     $("#new-dashboard .next-appraisal h4").text(i18next.t("You-have-no-upcoming-$1", {$1:myLabel}));
+    // }
 
-    if (!dashboardData.next_appraisal.id && !dashboardData.next_training_session.id) {
-        // FIXME: No calendar or appraisals enabled, show the next training item
-        $("#new-dashboard .next-appraisal h4").text(i18next.t('You-have-no-upcoming-training-sessions'));
-    }
-    // Temp - show message if neither appraisals or training calendar enabled
-    if (companySettings.external_training_enabled && !companySettings.appraisals_enabled && !companySettings.training_calendar_enabled) {
-        var my_label = self.labels.external_training_label_plural;
-        $("#new-dashboard .next-appraisal h4").text(i18next.t("Details-of-your-$1-coming-soon", {$1: my_label}));
-        $(document).off("click", "#new-dashboard .next-appraisal h4");
-        $(document).on("click", "#new-dashboard .next-appraisal h4", function() {$.mobile.changePage("#my-training")});
-    }
+    // if (!dashboardData.next_appraisal.id && !dashboardData.next_training_session.id) {
+    //     // FIXME: No calendar or appraisals enabled, show the next training item
+    //     $("#new-dashboard .next-appraisal h4").text(i18next.t('You-have-no-upcoming-training-sessions'));
+    // }
+    // // Temp - show message if neither appraisals or training calendar enabled
+    // if (companySettings.external_training_enabled && !companySettings.appraisals_enabled && !companySettings.training_calendar_enabled) {
+    //     var my_label = self.labels.external_training_label_plural;
+    //     $("#new-dashboard .next-appraisal h4").text(i18next.t("Details-of-your-$1-coming-soon", {$1: my_label}));
+    //     $(document).off("click", "#new-dashboard .next-appraisal h4");
+    //     $(document).on("click", "#new-dashboard .next-appraisal h4", function() {$.mobile.changePage("#my-training")});
+    // }
     
-    // Populate forums stats column
-    if (companySettings.forums_enabled) {
-        $("#new-dashboard .stats .forums .label").text(dashboardData.unread_topics_count);
-        $("#new-dashboard .stats .forums .label").show();
-        $("#new-dashboard .stats .forums .forums-message").css("margin-top", "1rem");
-        if (dashboardData.unread_topics_count == 0) {
-            var message = i18next.t("You-have-no-unread-discussions");
-            $("#new-dashboard .stats .forums .label").hide();
-            $("#new-dashboard .stats .forums .forums-message").css("margin-top", "-1rem");
-        } else if (dashboardData.unread_topics_count == 1) {
-            var message = i18next.t("You-have-one-unread-discussion")
-        } else {
-            var message = i18next.t('You-have-$1-unread-discussions', { $1: dashboardData.unread_topics_count } )  
-        }
-        $("#new-dashboard .stats .forums .forums-message").text(message);
-    }
-    // Populate coms column
-    var newsMsg = "";
-    var noticeboardMsg = "";
-    var commsSelector = $("#new-dashboard .stats .comms");
-    /* News */
-    if (companySettings.news_enabled) {
-        var newsCount = dashboardData.available_news_articles;
-        commsSelector.find(".news-badge").text(newsCount);
-        commsSelector.find(".news-badge").show();
-        if (newsCount == 0) {
-            newsMsg = i18next.t("no-news-items-available");
-            commsSelector.find(".news-badge").hide();
-        } else {
-            newsMsg = i18next.t("$1-news-items-available", { $1: newsCount });
-        }
-    } 
-    if (companySettings.branch_resources_enabled) {
-        var noticeCount = dashboardData.unread_noticeboard_items;
-        commsSelector.find(".noticeboard-badge").text(noticeCount);
-        commsSelector.find(".noticeboard-badge").show();
-        if (noticeCount == 0) {
-            var my_label = i18next.t(self.labels.noticeboard_label_plural).toLowerCase();
-            noticeboardMsg = i18next.t("no-unread-$1", { $1: my_label});
-            commsSelector.find(".noticeboard-badge").hide();
-        } else {
-            var my_label = i18next.t(self.labels.noticeboard_label_plural).toLowerCase();
-            noticeboardMsg = i18next.t("$1-unread-$2", { $1: noticeCount, $2: my_label});
-        }
-    }
-    var combined = "";
-    if (companySettings.news_enabled && companySettings.branch_resources_enabled) {
-        combined = i18next.t("and");
-    }
-    if (companySettings.news_enabled || companySettings.branch_resources_enabled) {
-        // all values will arrive translated
-        var msg = (i18next.t("You-have") + ' ' + noticeboardMsg + ' ' + combined + ' ' + newsMsg);
-        commsSelector.find(".comms-message").text(msg);
-        commsSelector.find(".comms-message").css("margin-top", "1rem");
-    }
-    if (newsCount == 0 && noticeCount == 0) {
-        commsSelector.find(".comms-message").css("margin-top", "-1rem");
-    }
+    // // Populate forums stats column
+    // if (companySettings.forums_enabled) {
+    //     $("#new-dashboard .stats .forums .label").text(dashboardData.unread_topics_count);
+    //     $("#new-dashboard .stats .forums .label").show();
+    //     $("#new-dashboard .stats .forums .forums-message").css("margin-top", "1rem");
+    //     if (dashboardData.unread_topics_count == 0) {
+    //         var message = i18next.t("You-have-no-unread-discussions");
+    //         $("#new-dashboard .stats .forums .label").hide();
+    //         $("#new-dashboard .stats .forums .forums-message").css("margin-top", "-1rem");
+    //     } else if (dashboardData.unread_topics_count == 1) {
+    //         var message = i18next.t("You-have-one-unread-discussion")
+    //     } else {
+    //         var message = i18next.t('You-have-$1-unread-discussions', { $1: dashboardData.unread_topics_count } )  
+    //     }
+    //     $("#new-dashboard .stats .forums .forums-message").text(message);
+    // }
+    // // Populate coms column
+    // var newsMsg = "";
+    // var noticeboardMsg = "";
+    // var commsSelector = $("#new-dashboard .stats .comms");
+    // /* News */
+    // if (companySettings.news_enabled) {
+    //     var newsCount = dashboardData.available_news_articles;
+    //     commsSelector.find(".news-badge").text(newsCount);
+    //     commsSelector.find(".news-badge").show();
+    //     if (newsCount == 0) {
+    //         newsMsg = i18next.t("no-news-items-available");
+    //         commsSelector.find(".news-badge").hide();
+    //     } else {
+    //         newsMsg = i18next.t("$1-news-items-available", { $1: newsCount });
+    //     }
+    // } 
+    // if (companySettings.branch_resources_enabled) {
+    //     var noticeCount = dashboardData.unread_noticeboard_items;
+    //     commsSelector.find(".noticeboard-badge").text(noticeCount);
+    //     commsSelector.find(".noticeboard-badge").show();
+    //     if (noticeCount == 0) {
+    //         var my_label = i18next.t(self.labels.noticeboard_label_plural).toLowerCase();
+    //         noticeboardMsg = i18next.t("no-unread-$1", { $1: my_label});
+    //         commsSelector.find(".noticeboard-badge").hide();
+    //     } else {
+    //         var my_label = i18next.t(self.labels.noticeboard_label_plural).toLowerCase();
+    //         noticeboardMsg = i18next.t("$1-unread-$2", { $1: noticeCount, $2: my_label});
+    //     }
+    // }
+    // var combined = "";
+    // if (companySettings.news_enabled && companySettings.branch_resources_enabled) {
+    //     combined = i18next.t("and");
+    // }
+    // if (companySettings.news_enabled || companySettings.branch_resources_enabled) {
+    //     // all values will arrive translated
+    //     var msg = (i18next.t("You-have") + ' ' + noticeboardMsg + ' ' + combined + ' ' + newsMsg);
+    //     commsSelector.find(".comms-message").text(msg);
+    //     commsSelector.find(".comms-message").css("margin-top", "1rem");
+    // }
+    // if (newsCount == 0 && noticeCount == 0) {
+    //     commsSelector.find(".comms-message").css("margin-top", "-1rem");
+    // }
 };
 
 // START NOTICEBOARD

@@ -49,7 +49,7 @@
 	
     <link rel="stylesheet" type="text/css" href="js/fullcalendar-3.9.0/fullcalendar.css">
 
-	<title>MOCK</title>
+	<title>SCORM MOCK</title>
 
 	<!-- SemanticUI stylesheet -->
 	<link rel="stylesheet" type="text/css" href="semantic/semantic.css" />
@@ -105,71 +105,80 @@
 	<script src="js/summernote-lite.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/giphy.css" />
 	<script src="js/giphy.js"></script>
-	
-	<script>
-		 $(document).on("click", '[data-action="open-scorm-module-a"]', function () {
-			event.preventDefault();
-			var url = "https://mm-upgrade-staging.flowhospitalitytraining.co.uk/api/v2/mobile/module_redirect/?access_code=TBGFZSBKPLWCRQJPNKVL&module_id=18431&cookie_consent=1"
-			window.screen.orientation.unlock();
-			if (device.platform == "Android") {
-				var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=no,toolbar=no');
-				browser.addEventListener('loadstop', AddCssInApp);
-				browser.addEventListener('loadstop', AddJsInApp);
+	<style>
+		#modal-scorm{
+			width: 90%;
+			left: 2%;
+			height: 98vh;
+			top: 1vh;
+			margin: 0;
+		}
+		.scorm-iframe-container{
+			height: 98vh;
+		}
+		.mainFrame {
+				width:100%;
+				height:100%;
+				border-width:0px;
+				overflow:scroll !important; 
+				-webkit-overflow-scrolling:touch !important;
 			}
-			if (device.platform == "iOS") {
-				var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=yes,toolbar=yes');
-				browser.addEventListener('loadstop', AddCssInApp);
-				browser.addEventListener('loadstop', AddJsInApp);
-			}
-			browser.addEventListener('exit', function() {
-				window.screen.orientation.lock('portrait');
-			});
-			function AddJsInApp() {
-				console.log("InAppBrowser Window loaded");
-				$.ajax({
-					type: "GET",
-					url: "./custom-ios-inapp.js",
-					dataType: "text",
-					success: function (JScode) {
-						browser.executeScript(
-							{ code:  JScode},
-							function(){
-								console.log("JS code Inserted Succesfully into inApp Browser Window");
-							}
-						);
-					},
-					error: function () {
-					console.error("Ajax Error");
-				}
-				});
-			}
-			function AddCssInApp() {
-				console.log("InAppBrowser Window loaded");
-				$.ajax({
-					type: "GET",
-					url: "./custom-ios-inapp.css",
-					dataType: "text",
-					success: function (CSScode) {
-						browser.insertCSS(
-							{ code:  CSScode},
-							function(){
-								console.log("CSS code Inserted Succesfully into inApp Browser Window");
-							}
-						);
-					},
-					error: function () {
-					console.error("Ajax Error");
-				}
-				});
-			}
-		 });
-	</script>
-
+	</style>
 </head>
 
 <body style="background-color: #000000;">
 
+	<div id="pre-loader"
+		style="position: absolute; top: 0; right: 0; left: 0; bottom: 0; background-color: rgba(255,255,255,1); z-index: 10000;">
+		<div class="ui middle aligned grid" style="height: 100%;">
+			<div class="center aligned column">
+				<i class="notched circle loading icon huge center middle aligned"></i>
+			</div>
+		</div>
+	</div>
+	<div id="background">
+		<img class="background-img" />
+	</div> 
+	
+	<!-- Start of signin page -->
 	<div data-role="page" id="login">
+		<div class='login-background'>
+			<div role="main" class="ui-content">
+				<div class="login-logo-container">
+					<img src="./img/FlowApp_Login_Logo.svg" class="login-logo" />
+				</div>
+				<form id="loginForm">
+					<p data-i18n='Please-enter-your-details-to-login'>
+					</p>
+					<input type="email" data-clear-btn="true" name="email" data-i18n="[placeholder]Email-Address" id="email-input"
+						value="">
+					<input type="password" data-clear-btn="true" data-i18n="[placeholder]Password" name="password"
+						id="password-input" value="">
+					<button data-i18n='login' id="submit" name="submit"
+						class="ui-btn ui-btn-inline ui-corner-all ui-mini login-btn">
+					</button>
+					<p>
+						<a data-i18n='Cant-access-your-account' href="https://www.flowmodulemanager.co.uk/-/password_reset/" data-action="open-external">
+						</a>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- End of signin page -->
+
+	<!-- SCORM MODAL TEMPLATE -->
+	<div class="ui modal" id='modal-scorm'>
+		<i class="close icon"></i>
+		<div class="scorm-iframe-container">
+			<!-- <iframe class="mainFrame" id='mainFrame' frameborder="0"></iframe> -->
+			<!-- <object type="text/html" data="content-to-scroll.html"></object> -->
+			<object class="mainFrame" id='mainFrame' type="text/html"></object>
+		</div>
+	</div>
+	<!-- SCORM MODAL TEMPLATE -->
+
+	<div data-role="page" id="new-dashboard">
 		<div class='login-background'>
 			<div role="main" class="ui-content">
 				<div class="login-logo-container">
