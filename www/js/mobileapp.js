@@ -928,15 +928,16 @@ MobileApp.prototype.setupEvents = function () {
       // 	// browser.addEventListener('loadstop', AddCssInApp);
       // 	// browser.addEventListener('loadstop', AddJsInApp);
       // }
-      openModalIframe(url);
-      function openModalIframe(scorm_url){
-          var scormUrl = scorm_url;
-          $("#modal-scorm").modal('show').modal({
-              closable: true
-          });
-          var iframe = $('#mainFrame');
-          iframe.attr( "src", scormUrl );
-      }
+      	var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=yes,toolbar=yes');
+    //   openModalIframe(url);
+    //   function openModalIframe(scorm_url){
+    //       var scormUrl = scorm_url;
+    //       $("#modal-scorm").modal('show').modal({
+    //           closable: true
+    //       });
+    //       var iframe = $('#mainFrame');
+    //       iframe.attr( "src", scormUrl );
+    //   }
       function AddJsInApp() {
           console.log("InAppBrowser Window loaded");
           $.ajax({
@@ -2276,7 +2277,7 @@ MobileApp.prototype.login = function () {
             self.getSettings();
             //self.getBranding();
             $(document).trigger("postLogin", [data.access_code]);
-            self.getTraineeDetails();
+            // self.getTraineeDetails();
             self.getTrainingPath();
             $('#submit').removeAttr("disabled");
         },
@@ -2653,47 +2654,47 @@ MobileApp.prototype.getTrainingPath = function (id) {
     $('#my-training .white-toolbar').find('h1').text(i18next.t('My-Training'))
 
     $(id).empty();
-    if (localStorage.trainingPath) {
-        $(id).empty();
-        $(id).buildTrainingPath(JSON.parse(localStorage.trainingPath));
-    } else {
-        $(id).append($("<div/>").addClass("sixteen wide column"));
-        self.appendMsg(id + " .column", i18next.t("Loading-training-path"));
-    }
+    // if (localStorage.trainingPath) {
+    //     $(id).empty();
+    //     $(id).buildTrainingPath(JSON.parse(localStorage.trainingPath));
+    // } else {
+    //     $(id).append($("<div/>").addClass("sixteen wide column"));
+    //     self.appendMsg(id + " .column", i18next.t("Loading-training-path"));
+    // }
 
-    $.ajax({
-        url: self.remoteHost + self.trainingPathURL,
-        type: 'GET',
-        dataType: 'json',
-        success:
-            function (data) {
-                var newData = JSON.stringify(data);
-                if (localStorage.trainingPath != newData) {
-                    localStorage.trainingPath = newData;
-                    // Only update the page if we are still on the my-training page
-                    var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
-                    if(activePage[0].id == "my-training") {
-                        $(id).empty();
-                        $(id).buildTrainingPath(data);
-                    }
-                }
-            },
-        error: function (e) {
-            console.error(e);
-            var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
-            if(activePage[0].id == "my-training") {
-                if (localStorage.trainingPath) {
-                    $(id).empty();
-                    $(id).buildTrainingPath(JSON.parse(localStorage.trainingPath));
-                } else {
-                    $(id).empty();
-                    self.appendMsg(id, i18next.t('could-not-load-training-path'));
-                }
-            }
-        },
-        beforeSend: self.setHeaders
-    });
-    self.trainingPathIcon();
+    // $.ajax({
+    //     url: self.remoteHost + self.trainingPathURL,
+    //     type: 'GET',
+    //     dataType: 'json',
+    //     success:
+    //         function (data) {
+    //             var newData = JSON.stringify(data);
+    //             if (localStorage.trainingPath != newData) {
+    //                 localStorage.trainingPath = newData;
+    //                 // Only update the page if we are still on the my-training page
+    //                 var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
+    //                 if(activePage[0].id == "my-training") {
+    //                     $(id).empty();
+    //                     $(id).buildTrainingPath(data);
+    //                 }
+    //             }
+    //         },
+    //     error: function (e) {
+    //         console.error(e);
+    //         var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
+    //         if(activePage[0].id == "my-training") {
+    //             if (localStorage.trainingPath) {
+    //                 $(id).empty();
+    //                 $(id).buildTrainingPath(JSON.parse(localStorage.trainingPath));
+    //             } else {
+    //                 $(id).empty();
+    //                 self.appendMsg(id, i18next.t('could-not-load-training-path'));
+    //             }
+    //         }
+    //     },
+    //     beforeSend: self.setHeaders
+    // });
+    // self.trainingPathIcon();
 };
 /* End of Training Path Screen */
 

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "displayName": "Flow Training",
   "scripts": {
+    "kill-java": "cmd '/C TASKKILL /f /im java.exe'",
     "ionic:build": "echo 'Flow!'",
     "run-release": "phonegap run android --prod --release --buildConfig=build.json",
     "build-release": "phonegap build android --prod --release --buildConfig=build.json",
@@ -31,7 +32,8 @@
         "FCM_VERSION": "17.0.+"
       },
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-advanced-http": {}
+      "cordova-plugin-advanced-http": {},
+      "@globules-io/cordova-plugin-ios-xhr": {}
     },
     "platforms": [
       "android",
@@ -40,6 +42,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@globules-io/cordova-plugin-ios-xhr": "git+https://github.com/globules-io/cordova-plugin-ios-xhr.git",
     "cordova-android": "9.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-plugin-advanced-http": "^3.1.0",
