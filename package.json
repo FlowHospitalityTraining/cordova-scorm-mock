@@ -40,12 +40,13 @@
       "browser"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "cordova-ios": "^6.2.0"
+  },
   "devDependencies": {
     "@globules-io/cordova-plugin-ios-xhr": "git+https://github.com/globules-io/cordova-plugin-ios-xhr.git",
     "cordova-android": "9.1.0",
     "cordova-browser": "^6.0.0",
-    "cordova-plugin-advanced-http": "^3.1.0",
     "cordova-plugin-console": "^1.1.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",

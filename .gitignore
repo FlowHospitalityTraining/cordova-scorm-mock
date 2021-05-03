@@ -12,3 +12,4 @@ GoogleService-Info.plist
 /resources/
 # package-lock.json
 build.json
+package-lock.json
