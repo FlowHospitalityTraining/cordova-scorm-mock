@@ -75,6 +75,7 @@
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/push_notification_logo" />
     </config-file>
     <platform name="ios">
+        <preference name="ScrollEnabled" value="true" />
         <allow-intent href="http://*/*" />
         <allow-intent href="https://*/*" />
         <allow-intent href="tel:*" />
@@ -159,8 +160,6 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="cordova-plugin-console" spec="^1.1.0" />
-    <plugin name="cordova-plugin-device" spec="^2.0.3" />
     <plugin name="cordova-plugin-dialogs" spec="^2.0.2" />
     <plugin name="cordova-plugin-file" spec="^6.0.2" />
     <plugin name="cordova-plugin-file-opener2" spec="^3.0.5">

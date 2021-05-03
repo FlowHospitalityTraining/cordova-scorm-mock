@@ -902,22 +902,7 @@ MobileApp.prototype.setupEvents = function () {
     $(document).on("click", '[data-action="open-scorm-module-a"]', function (event) {
       event.preventDefault();
       var url = "https://mm-upgrade-staging.flowhospitalitytraining.co.uk/api/v2/mobile/module_redirect/?access_code=TBGFZSBKPLWCRQJPNKVL&module_id=18431&cookie_consent=1"
-      const options = {
-          method: 'get',
-          // data: { id: 12, message: 'test' },
-          // headers: { Authorization: 'OAuth2: token' }
-      };
-      // cordova.plugin.http.sendRequest(url, options, function(response) {
-      //     // prints 200
-      //     console.log(response.status);
-      //     openModalIframe(response.data);
-      //     }, 
-      //     function(response) {
-      //     // prints 403
-      //     console.log(response.status);
-      //     //prints Permission denied
-      //     console.log(response.error);
-      // });
+
       // if (device.platform == "Android") {
       // 	var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=no,toolbar=no');
       // 	// browser.addEventListener('loadstop', AddCssInApp);
@@ -928,7 +913,7 @@ MobileApp.prototype.setupEvents = function () {
       // 	// browser.addEventListener('loadstop', AddCssInApp);
       // 	// browser.addEventListener('loadstop', AddJsInApp);
       // }
-      	var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=no,clearsessioncache=no,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=yes,toolbar=yes');
+      	var browser = cordova.InAppBrowser.open(url, '_blank', 'location=no,clearcache=yes,clearsessioncache=yes,enableViewportScale=yes,allowInlineMediaPlayback=yes,disallowoverscroll=yes,hardwareback=no,footer=yes,toolbar=yes');
     //   openModalIframe(url);
     //   function openModalIframe(scorm_url){
     //       var scormUrl = scorm_url;

@@ -12,8 +12,6 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-console": {},
-      "cordova-plugin-device": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-file": {},
       "cordova-plugin-file-opener2": {
@@ -32,22 +30,24 @@
         "FCM_VERSION": "17.0.+"
       },
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-advanced-http": {},
-      "@globules-io/cordova-plugin-ios-xhr": {}
+      "@globules-io/cordova-plugin-ios-xhr": {},
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-device": {}
     },
     "platforms": [
       "android",
-      "browser"
+      "browser",
+      "ios"
     ]
   },
   "dependencies": {
-    "cordova-ios": "^6.2.0"
+    "cordova-ios": "6.2.0"
   },
   "devDependencies": {
     "@globules-io/cordova-plugin-ios-xhr": "git+https://github.com/globules-io/cordova-plugin-ios-xhr.git",
     "cordova-android": "9.1.0",
     "cordova-browser": "^6.0.0",
-    "cordova-plugin-console": "^1.1.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-file": "^6.0.2",
