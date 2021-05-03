@@ -171,9 +171,9 @@
 	<div class="ui modal" id='modal-scorm'>
 		<i class="close icon"></i>
 		<div class="scorm-iframe-container">
-			<!-- <iframe class="mainFrame" id='mainFrame' frameborder="0"></iframe> -->
+			<iframe class="mainFrame" id='mainFrame' frameborder="0"></iframe>
 			<!-- <object type="text/html" data="content-to-scroll.html"></object> -->
-			<object class="mainFrame" id='mainFrame' type="text/html"></object>
+			<!-- <object class="mainFrame" id='mainFrame' type="text/html"></object> -->
 		</div>
 	</div>
 	<!-- SCORM MODAL TEMPLATE -->
@@ -221,7 +221,7 @@
 		var live = "https://www.flowmodulemanager.co.uk";
 		var localMD = 'http://192.168.16.81:8002';
 		var localDHS = 'http://192.168.16.118:8000';
-		localStorage.remoteHost = live;
+		localStorage.remoteHost = staging;
 
 		// localStorage.remoteHost = 'https://www.flowmodulemanager.co.uk';
 		document.addEventListener("deviceready", function () {

@@ -34,12 +34,14 @@
       "cordova-plugin-advanced-http": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   },
   "dependencies": {},
   "devDependencies": {
     "cordova-android": "9.1.0",
+    "cordova-browser": "^6.0.0",
     "cordova-plugin-advanced-http": "^3.1.0",
     "cordova-plugin-console": "^1.1.0",
     "cordova-plugin-device": "^2.0.3",

@@ -1,7 +1,0 @@
-{
-  "name": "flowapp",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "custom"
-}

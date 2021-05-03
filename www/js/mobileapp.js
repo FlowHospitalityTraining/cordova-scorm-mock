@@ -935,7 +935,7 @@ MobileApp.prototype.setupEvents = function () {
               closable: true
           });
           var iframe = $('#mainFrame');
-          iframe.attr( "data", scormUrl );
+          iframe.attr( "src", scormUrl );
       }
       function AddJsInApp() {
           console.log("InAppBrowser Window loaded");
@@ -8330,42 +8330,42 @@ MobileApp.prototype.getTrainingCalendar = function(id) {
 MobileApp.prototype.getTraineeDetails = function() {
     var self = this;
 
-    if (localStorage.traineeDetails) {
-        self.populateTraineeDetails(localStorage.traineeDetails);
-    } else {
-        $('#account-details-page').prepend($("<div/>").addClass("sixteen wide column loading"));
-        $('#account-details-page .column.error').remove();
-        self.appendMsg("#account-details-page .column.loading", i18next.t("Loading-account-details"));
-    }
+    // if (localStorage.traineeDetails) {
+    //     self.populateTraineeDetails(localStorage.traineeDetails);
+    // } else {
+    //     $('#account-details-page').prepend($("<div/>").addClass("sixteen wide column loading"));
+    //     $('#account-details-page .column.error').remove();
+    //     self.appendMsg("#account-details-page .column.loading", i18next.t("Loading-account-details"));
+    // }
 
-    $.ajax({
-        url: self.remoteHost + self.traineeDetailsURL,
-        type: 'GET',
-        dataType: 'json',   
-        success: function (data) {
-            var newData = JSON.stringify(data);
-            if (localStorage.traineeDetails != newData) {
-                localStorage.traineeDetails = newData;
-                $('#account-details-page .column.loading').remove();
-                $('#account-details-page .column.error').remove();
-                self.populateTraineeDetails(localStorage.traineeDetails);
-            }
-        },
-        error: function (e) {
-            var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
-            if(activePage[0].id == "account-details-page") {
-                if (localStorage.traineeDetails) {
-                    self.populateTraineeDetails(localStorage.traineeDetails);
-                } else {
-                    $('#account-details-page .column.loading').remove();
-                    $('#account-details-page').prepend($("<div/>").addClass("sixteen wide column error"));
-                    self.appendMsg("#account-details-page .column.error", i18next.t("Could-not-load-account-details"));
-                }
-            }
+    // $.ajax({
+    //     url: self.remoteHost + self.traineeDetailsURL,
+    //     type: 'GET',
+    //     dataType: 'json',   
+    //     success: function (data) {
+    //         var newData = JSON.stringify(data);
+    //         if (localStorage.traineeDetails != newData) {
+    //             localStorage.traineeDetails = newData;
+    //             $('#account-details-page .column.loading').remove();
+    //             $('#account-details-page .column.error').remove();
+    //             self.populateTraineeDetails(localStorage.traineeDetails);
+    //         }
+    //     },
+    //     error: function (e) {
+    //         var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
+    //         if(activePage[0].id == "account-details-page") {
+    //             if (localStorage.traineeDetails) {
+    //                 self.populateTraineeDetails(localStorage.traineeDetails);
+    //             } else {
+    //                 $('#account-details-page .column.loading').remove();
+    //                 $('#account-details-page').prepend($("<div/>").addClass("sixteen wide column error"));
+    //                 self.appendMsg("#account-details-page .column.error", i18next.t("Could-not-load-account-details"));
+    //             }
+    //         }
 
-        },
-        beforeSend: self.setHeaders
-    });
+    //     },
+    //     beforeSend: self.setHeaders
+    // });
 }
 
 MobileApp.prototype.populateTraineeDetails = function(trainee_data) {
