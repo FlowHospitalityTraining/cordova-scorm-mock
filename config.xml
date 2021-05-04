@@ -19,6 +19,13 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="WKWebViewOnly" value="true" />
+    <feature name="CDVWKWebViewEngine">
+        <param name="ios-package" value="CDVWKWebViewEngine" />
+    </feature>
+    <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+    <preference name="AllowBackForwardNavigationGestures" value="true" />
+    <preference name="Allow3DTouchLinkPreview" value="false" />
     <platform name="android">
         <allow-intent href="http://*/*" />
         <allow-intent href="https://*/*" />
@@ -165,7 +172,6 @@
     <plugin name="cordova-plugin-file-opener2" spec="^3.0.5">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
     </plugin>
-    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-globalization" spec="^1.11.0" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.2" />
     <plugin name="cordova-plugin-screen-orientation" spec="^3.0.2" />
